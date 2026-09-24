@@ -1,5 +1,10 @@
 package llm;
 
+import llm.client.LlmClient;
+import llm.client.LlmResponse;
+import llm.config.ProviderConfig;
+import llm.config.Providers;
+
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 

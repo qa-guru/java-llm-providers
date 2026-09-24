@@ -1,5 +1,8 @@
 package llm;
 
+import llm.config.ProviderConfig;
+import llm.config.Providers;
+
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Properties;

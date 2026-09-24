@@ -1,4 +1,7 @@
-package llm;
+package llm.config;
+
+import llm.client.OllamaClient;
+import llm.client.OpenAiCompatibleClient;
 
 import org.junit.jupiter.api.Test;
 

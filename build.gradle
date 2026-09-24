@@ -86,7 +86,7 @@ tasks.register('bench', JavaExec) {
     group = 'demo'
     description = 'Same prompt to every configured provider, prints the cost/latency table'
     classpath = llmClasspath
-    mainClass = 'llm.BenchMain'
+    mainClass = 'llm.bench.BenchMain'
     workingDir = layout.projectDirectory
     demoProps.each { key ->
         def override = System.getProperty(key)

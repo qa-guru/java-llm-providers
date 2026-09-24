@@ -1,4 +1,10 @@
-package llm;
+package llm.bench;
+
+import llm.client.LlmClient;
+import llm.client.LlmException;
+import llm.client.LlmResponse;
+import llm.config.ProviderConfig;
+import llm.config.Providers;
 
 import java.nio.file.Files;
 import java.nio.file.Path;

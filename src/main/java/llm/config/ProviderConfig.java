@@ -1,4 +1,4 @@
-package llm;
+package llm.config;
 
 import java.util.ArrayList;
 import java.util.List;

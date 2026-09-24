@@ -1,4 +1,4 @@
-package llm;
+package llm.client;
 
 /** Инфраструктурная ошибка вызова модели: сеть, авторизация, формат ответа. */
 public final class LlmException extends Exception {

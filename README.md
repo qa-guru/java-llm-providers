@@ -19,12 +19,32 @@ cd java-llm-providers
 ## Идея
 
 ```
-providers.properties ──► Providers ──► ProviderConfig ──► LlmClient
-                          (env ${VAR})      ready?         ollama|openai
+providers.properties ──► llm.config.Providers ──► ProviderConfig ──► llm.client.LlmClient
+                           (env ${VAR})              ready?            ollama|openai
 ```
 
 - **`ollama`** — `POST /api/generate`: localhost, удалённая коробка за nginx+basic auth, Ollama на арендованной GPU.
 - **`openai`** — `POST /v1/chat/completions`: OpenRouter, Groq, Google AI Studio, DeepSeek, Ollama Cloud, Yandex FM, GigaChat, Selectel FMC. Один клиент — девять провайдеров.
+
+## Структура
+
+```
+src/main/java/llm/
+  ChatMain.java                    # ./gradlew chat — один промпт в один провайдер
+  ProvidersMain.java               # ./gradlew providers — кто готов, кто skip
+  bench/BenchMain.java             # ./gradlew bench — все провайдеры × один промпт → таблица
+  client/
+    LlmClient.java                 # интерфейс «спроси у модели» — публичный API
+    LlmResponse.java               # text + tokensIn/tokensOut + durationMs
+    LlmException.java              # Kind: TIMEOUT / AUTH / RATE_LIMIT / …
+    OllamaClient.java              # POST /api/generate (+ basic auth для удалённой)
+    OpenAiCompatibleClient.java    # POST /v1/chat/completions
+  config/
+    Providers.java                 # loader: properties → configs → client()
+    ProviderConfig.java            # один провайдер: url / model / key / прайс
+```
+
+Тесты зеркалят пакеты: `llm.bench`, `llm.client`, `llm.config` — офлайн, без сети.
 
 ## Конфигурация
 

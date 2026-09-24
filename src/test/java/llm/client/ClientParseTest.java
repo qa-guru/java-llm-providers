@@ -1,4 +1,4 @@
-package llm;
+package llm.client;
 
 import org.junit.jupiter.api.Test;
 

@@ -1,4 +1,8 @@
-package llm;
+package llm.config;
+
+import llm.client.LlmClient;
+import llm.client.OllamaClient;
+import llm.client.OpenAiCompatibleClient;
 
 import java.io.IOException;
 import java.io.InputStream;

@@ -1,4 +1,6 @@
-package llm;
+package llm.bench;
+
+import llm.config.ProviderConfig;
 
 import org.junit.jupiter.api.Test;
 

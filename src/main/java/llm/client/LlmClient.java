@@ -1,4 +1,4 @@
-package llm;
+package llm.client;
 
 /**
  * Единый интерфейс «спроси у модели».

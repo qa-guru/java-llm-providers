@@ -1,5 +1,10 @@
 package llm;
 
+import llm.client.LlmClient;
+import llm.client.LlmResponse;
+import llm.config.ProviderConfig;
+import llm.config.Providers;
+
 import java.nio.file.Path;
 import java.time.Duration;
 import java.util.Properties;
@@ -41,7 +46,7 @@ public final class ChatMain {
                 costLabel(cfg.estimateCostUsd(r.tokensIn(), r.tokensOut())));
     }
 
-    static String costLabel(Double cost) {
+    private static String costLabel(Double cost) {
         return cost == null ? "?" : String.format("%.5f", cost);
     }
 }
