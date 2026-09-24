@@ -1,0 +1,11 @@
+.gradle/
+build/
+.idea/
+.vscode/
+*.iml
+allure-results/
+bin/
+providers.local.properties
+bench-out/
+.env
+*.env

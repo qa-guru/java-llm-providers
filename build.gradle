@@ -1,0 +1,111 @@
+plugins {
+    id 'java'
+    id 'application'
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+}
+
+application {
+    mainClass = 'llm.ChatMain'
+}
+
+run {
+    workingDir = layout.projectDirectory
+}
+
+repositories {
+    mavenCentral()
+}
+
+def demoProps = [
+        'provider', 'prompt', 'config', 'repeat', 'out', 'timeoutSec', 'maxTokens'
+]
+
+dependencies {
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.18.2'
+    testImplementation platform('org.junit:junit-bom:5.11.4')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+}
+
+test {
+    useJUnitPlatform {
+        def includeTagsProp = System.getProperty('includeTags')
+        if (includeTagsProp) {
+            includeTags(*(includeTagsProp.split(',')*.trim()))
+        } else {
+            // live — только по явному -DincludeTags=live (CI без провайдеров остаётся зелёным)
+            excludeTags('live')
+        }
+        def excludeTagsProp = System.getProperty('excludeTags')
+        if (excludeTagsProp) {
+            excludeTags(*(excludeTagsProp.split(',')*.trim()))
+        }
+    }
+    systemProperty 'file.encoding', 'UTF-8'
+    testLogging {
+        showStandardStreams = true
+        events 'passed', 'failed', 'skipped'
+        exceptionFormat = 'full'
+        showExceptions = true
+        showCauses = true
+    }
+    demoProps.each { key ->
+        def override = System.getProperty(key)
+        if (override != null) {
+            systemProperty key, override
+        }
+    }
+}
+
+def llmClasspath = sourceSets.main.runtimeClasspath
+
+tasks.register('chat', JavaExec) {
+    group = 'demo'
+    description = 'One prompt to one provider: ./gradlew chat -Dprovider=ollama-local -Dprompt="..."'
+    classpath = llmClasspath
+    mainClass = 'llm.ChatMain'
+    workingDir = layout.projectDirectory
+    demoProps.each { key ->
+        def override = System.getProperty(key)
+        if (override != null) {
+            systemProperty key, override
+        }
+    }
+}
+
+tasks.register('bench', JavaExec) {
+    group = 'demo'
+    description = 'Same prompt to every configured provider, prints the cost/latency table'
+    classpath = llmClasspath
+    mainClass = 'llm.BenchMain'
+    workingDir = layout.projectDirectory
+    demoProps.each { key ->
+        def override = System.getProperty(key)
+        if (override != null) {
+            systemProperty key, override
+        }
+    }
+}
+
+tasks.register('providers', JavaExec) {
+    group = 'demo'
+    description = 'List providers from providers.properties: ready / skipped and why'
+    classpath = llmClasspath
+    mainClass = 'llm.ProvidersMain'
+    workingDir = layout.projectDirectory
+    demoProps.each { key ->
+        def override = System.getProperty(key)
+        if (override != null) {
+            systemProperty key, override
+        }
+    }
+}

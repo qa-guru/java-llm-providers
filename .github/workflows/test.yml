@@ -1,0 +1,23 @@
+name: test
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - name: Offline tests (no keys, no network calls to providers)
+        run: ./gradlew test --console=plain
+      - name: Providers readiness (all skip without secrets — demo of the table)
+        run: ./gradlew providers --console=plain
